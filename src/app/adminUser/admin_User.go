@@ -26,10 +26,13 @@ func admin_login(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		userName := r.FormValue("userName")
 		pwd := r.FormValue("pwd")
-
+		if !forms.Reg_user(userName) {
+			ExitMsg(w, "账号错误")
+			return
+		}
 		userData := model.AdminUser_Find(userName)
 		if userData == nil {
-			ExitMsg(w, "账号错误")
+
 			return
 		}
 		fmt.Println(forms.Tomd5(pwd))

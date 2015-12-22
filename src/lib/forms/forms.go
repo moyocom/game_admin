@@ -23,7 +23,7 @@ func Reg_email(email string) bool {
 }
 
 func Reg_user(user string) bool {
-	ruser, err := regexp.Compile("^[a-zA-Z0-9_\u2E80-\u9FFF]{1,7}$")
+	ruser, err := regexp.Compile("^[a-zA-Z0-9_\u2E80-\u9FFF]{1,12}$")
 	if err != nil {
 		panic(err)
 	}

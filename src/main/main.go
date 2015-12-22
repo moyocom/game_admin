@@ -15,7 +15,6 @@ func main() {
 	fmt.Println("Server Start")
 
 	model.Init()
-
 	http.Handle("/static/", http.FileServer(http.Dir(".")))
 	http.Handle("/", app.R)
 	http.ListenAndServe(":8081", nil)
