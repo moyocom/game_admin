@@ -1,0 +1,22 @@
+{{define "LeftMenu"}}
+<li><a href="/adminGamePlayer/index" class="active">玩家操作</a></li>
+<li><a href="/adminGamePlayer/query">玩家数据查询</a></li>
+{{end}}
+
+
+{{define "Main"}}
+
+ <h4>玩家操作</h4>
+ <hr/>
+ <form class="text-center">
+  <table class="table  table-hover ">
+    <tr>
+    <td width="100" >玩家名称</td><td  width="250"><input type="text" /></td>
+    <td  width="100">操作</td><td><select><option>踢出玩家</option><option>封禁玩家</option><option>发送奖励</option></select></td>
+    <td></td>
+  </tr>
+  <tr><td colspan="5"><button type="submit" class="btn  btn-primary">确定</button></td></tr>
+  </table>
+ </form>
+
+{{end}}

@@ -1,0 +1,77 @@
+input,button,select,textarea{outline:none}
+body{ background-color:#F4F4F4; padding:0px; margin:0px; }
+.topbar{ width:100%; background-color:#488FCE; height:45px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);}
+.topmainbar{ width:1000px; text-align:left}
+.toplogo{ color:#FFF; font-weight:bold; font-size:25px; padding-top:8px; float:left}
+.nav{ float:left; margin:0px;}
+.nav li a{ float:left; list-style:none; display:block;color:#FFF; text-decoration:none; font-size:14px; height:45px;padding: 0 12px; line-height:45px;}
+.nav li a:hover{ text-decoration:underline}
+.nav li{ float:left; list-style:none;}
+.topcur{ background-color:#3B7FC4;}
+.search{ float:left;background: #F2F2F2;width: 160px;height: 28px;margin: 8px 0 0 10px;border-radius: 4px;box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) inset;display: inline;}
+#sipt{ width:120px;margin: 6px 0 0 5px;background: none;border: 0 none; float:left; padding:0px;-webkit-user-select: text;}
+#ssear{ float:left; width:30px;background: none;border: 0 none;height: 28px; padding:0px; margin:0px; cursor:pointer;}
+#ssear img{ border:none}
+.search:hover{background:#fff;}
+.top_user{ float:right;padding: 13px 0 0; }
+.top_user a{margin: 0 0 0 10px; color:#FFF; font-size:12px; text-decoration:none;line-height: 18px;}
+.top_user a:hover{ text-decoration:underline}
+#user{ font-weight:bold}
+.main{ width:1000px; margin:auto;}
+
+.block{border: 1px solid;border-color: white #EFEFEF lightGrey #EFEFEF;box-shadow: 0 1px 1px rgba(0, 0, 0, 0.02);background: white;border-radius: 3px; margin:10px 0px; padding:10px;}
+.block a{ text-decoration:none; color:#000;}
+.block a:hover{ text-decoration:underline}
+.topb{ width:50%; float:left;}
+.main{ font-size:12px;}
+.left{ width:630px;}
+.article h1{ font-size:16px; color:#494949; margin-bottom:5px;}
+.article{ color:#434343; font-size:14px; line-height:30px;}
+.article_info{ color:#444; font-size:12px; text-align:right; padding-right:30px; border-bottom:1px solid #ccc}
+.comment{  margin-top:10px;}
+.commuser{ font-size:12px; background-color:#eaeaea; padding-left:10px;border-top:1px solid #ccc;}
+.msg{ font-size:12px; padding-left:10px;}
+.footer{ text-align:center; font-size:12px; background-color:#f0f0f0; padding:10px; margin-top:40px; line-height:30px; border-top:1px solid #bbb; clear:both}
+
+.left{ float:left; width:720px;}
+.right{ float:right; width:230px;}
+
+.gcate_title{background: #F7F7F7;border-top: 1px solid white;padding: 7px 10px;border-bottom: 1px solid #E8E8E8;font-size: 12px;color: #444; font-weight:bold}
+.gcate{ background-color:#FFF;border-top: 1px solid #E5E5E5;margin-top: -1px; clear:both;}
+.allcg{border: 1px solid;border-color: white #EFEFEF lightGrey #EFEFEF;box-shadow: 0 1px 1px rgba(0, 0, 0, 0.02);background: white;border-radius: 3px;margin-bottom: 15px;}
+.glist li{ list-style:none; float:left; padding:0 10px; line-height:25px;}
+.glist{ padding:10px;} 
+.glist a{ color:#333; text-decoration:none}
+.glist a:hover{ text-decoration:underline}
+.topb li{ line-height:25px; list-style:none}
+.dir{ margin-top:10px;}
+.dir a{ color:#666; text-decoration:none;}
+.dir a:hover{ text-decoration:underline}
+input,textarea,select {padding:4px 4px;font-size: 100%;line-height:18px;border:1px solid #ccc;background-color:#fff;box-shadow:2px 2px 2px #f0f0f0 inset;vertical-align: middle;margin: 0;font-family: inherit;color:#333;}
+input:focus,textarea:focus{outline:2px solid #99d8f5;border-color:#7bbff2;}
+input[text]{height:18px;}
+.tlist{ margin:5px; margin-top:0px; padding:10px;padding-top:0px;}
+.tlist a{ font-size:14px; color:#343434}
+.tlist td{ border-bottom:1px dashed #ccc; line-height:30px; }
+.tlist th{ color:#444; font-weight:normal; text-align:left; border-bottom:1px dashed #ccc; line-height:25px;}
+.fflist{ font-size:14px; line-height:24px;border-bottom:1px dashed #ccc;}
+.ttitle{ font-size:14px; margin:0px; padding:0px; border-bottom:1px dashed #ccc;height: 43px;line-height: 43px;padding: 0 15px;}
+.post_edit{ margin-top:50px;}
+.ffuser{ font-size:12px; float:left; width:130px; background-color:#F7F7F7;min-height:140px; text-align:center; padding:15px 0px;}
+.ffuser a{color: #1D53BF; display:block; margin-top:8px;}
+.ffzw{ float:left; width:560px; padding:10px; padding-bottom:0px;}
+.linfo{ font-size:12px; color:#999}
+.linfo a{ color: #1D53BF;}
+.fftext{ min-height:120px; padding-bottom:10px;}
+.linfo{ text-align:right}
+.user_menu{ margin:0px; padding:0px; border-bottom:1px solid #ccc;}
+.user_menu li{ list-style:none; float:left; font-size:12px; font-weight:bold; padding:0px 12px; text-align:left; line-height:30px;}
+.user_menu_sel{ border-bottom:2px solid #000;}
+.user_menu_sel a{ color:#369}
+.user_menu li a:hover{ text-decoration:none}
+.usertb{ margin:20px;}
+.usertb td{ height:40px;}
+.listuser a{ font-size: 12px; color: #666;}
+.listuser{ width: 100px; overflow: header}
+.tlist table{ color: #666}
+.ffuser img{ width: 110px; height: 110px;}

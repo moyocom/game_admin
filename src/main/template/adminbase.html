@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/static/css/admin.css" />
+<script type="text/javascript" src="/static/js/jquery-1.7.1.min.js"></script>
+<title>横扫三国后台管理</title>
+</head>
+<body>
+ <div id="header">
+  <div id="logo"><i>横扫三国</i></div>
+  <ul id="topmenu">
+  	<li><a href="/">主页</a></li>
+    {{range .apps}}
+      <li ><a href="/{{.Pkgname}}/index">{{.Appname}}</a></li>
+    {{end}}
+  </ul>
+  <div id="othermsg">{{if .user}}管理员:<a href="/user/center">{{.user.UserName}}</a>{{end}}</div>
+ </div>
+
+ <div id="main">
+  {{if .ShowLeftMenu}}
+  <div id="leftmenu">
+   <ul>
+     {{template "LeftMenu" .}}
+   </ul>
+  </div>
+  {{end}}
+
+  <div id="rightnr" class="content-radius">
+    {{template "Main" .}}
+  </div>
+
+
+ </div>
+
+ <script type="text/javascript">
+  setlayout = function()
+  {
+    leftwidth =  $("#leftmenu").width()
+
+  	$("#rightnr").css({"width":$(document).width()-leftwidth-60,"height":$(document).height()-100});
+  }
+  $(document).ready(setlayout);
+  $(window).resize(setlayout);
+ </script>
+</body>
+</html>
