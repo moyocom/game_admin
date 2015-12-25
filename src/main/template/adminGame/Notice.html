@@ -7,6 +7,8 @@
 {{define "Main"}}
  <h4>发布公告</h4>
  <hr/>
-
-
+  <form method="post" action="/adminGame/AddNotice">
+   <p><textarea style="width:640px; height:320px;" name="NoticeValue"></textarea></p>
+   <p><input type="submit" value="提交" class="btn btn-primary btn-large" /></p>
+  </form>
 {{end}}

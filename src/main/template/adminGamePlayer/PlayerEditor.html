@@ -1,6 +1,6 @@
 {{define "LeftMenu"}}
 <li><a href="/adminGamePlayer/index" class="active">玩家操作</a></li>
-<li><a href="/adminGamePlayer/query">玩家数据查询</a></li>
+<li><a href="/adminGamePlayer/playerList">玩家列表</a></li>
 {{end}}
 
 
@@ -8,15 +8,79 @@
 
  <h4>玩家操作</h4>
  <hr/>
- <form class="text-center">
-  <table class="table  table-hover ">
-    <tr>
-    <td width="100" >玩家名称</td><td  width="250"><input type="text" /></td>
-    <td  width="100">操作</td><td><select><option>踢出玩家</option><option>封禁玩家</option><option>发送奖励</option></select></td>
-    <td></td>
-  </tr>
-  <tr><td colspan="5"><button type="submit" class="btn  btn-primary">确定</button></td></tr>
-  </table>
- </form>
 
+  <div style="text-align:left"><div>
+    <input type="text" Id="userId" style="width:80px;margin-right:20px"  placeholder="玩家ID"/>
+    <input type="text" Id="userName" placeholder="玩家名称" />
+  </div></div>
+  <form class="text-center" action="/adminGamePlayer/playerEditorOP" method="post">
+  <input type="hidden" name="playerID" id="OPPlayerID"/>
+  <h5 style="text-align:left">基本操作</h5>
+  <table class="table  table-hover ">
+    <tr><td colspan="3"><input type="text" id="OPTime"  placeholder="操作时间"/>(默认为1)</td></tr>
+    <tr>
+      <td colspan="3">
+        <label class="checkbox inline"><input type="checkbox" name="USERDOOP" value="vJinYan" />禁言</label>
+        <label class="checkbox inline"><input type="checkbox" name="USERDOOP" value="vFengHao" />封号</label>
+        <label class="checkbox inline"><input type="checkbox" name="USERDOOP" value="vFengIP" />封IP</label>
+        <label class="checkbox inline"><input type="checkbox" name="USERDOOP" value="vTiRen" />踢人</label>
+
+        <label class="checkbox inline"><input type="checkbox" name="USERDOOP" value="vReJinyan" />解除禁言</label>
+        <label class="checkbox inline"><input type="checkbox" name="USERDOOP" value="vReFengHao" />解除封号</label>
+        <label class="checkbox inline"><input type="checkbox" name="USERDOOP" value="vReFengIP" />解除封IP</label>
+      </td>
+    <tr>
+
+    <tr><td colspan="3"><input onclick="javascript:userEditorOP()" type="button" value="提交" class="btn btn-primary" /></td></tr>
+  </table>
+  </form>
+  <h5>发送邮件</h5>
+  <form>
+   <input type="hidden" name="playerID" id="MailPlayerID"/>
+   <table class="table">
+     <tr><td colspan="4"><input type="text" style="width:400px;" placeholder="标题"  /></td></tr>
+     <tr><td colspan="4"><textarea placeholder="正文"  style="width:600px; height:200px;"></textarea></td></tr>
+     <tr><td style="width:80px"><input type="text" placeholder="silver" /></td>
+         <td style="width:80px"><input type="text" placeholder="gold" /></td>
+         <td style="width:80px"><input type="text" placeholder="goods_id" /></td><td><input type="text" placeholder="goods number" /></td></tr>
+    <tr><td><input type="submit" value="提交" class="btn btn-primary"/> </td><td colspan="3"></td></tr>
+   </table>
+  </form>
+
+  <script>
+    $("#userId").blur(function(){
+        htmlobj=$.ajax({url:"/adminGamePlayer/Query",async:false,type:"POST",data:{"playerID":$("#userId").val()}});
+        $("#userName").val(htmlobj.responseText);
+        $("OPPlayerID").val($("#userId").val());
+    });
+
+    $("#userName").blur(function(){
+      htmlobj=$.ajax({url:"/adminGamePlayer/Query",async:false,type:"POST",data:{"playerName":$("#userName").val()}});
+      $("#userId").val(htmlobj.responseText);
+      $("MailPlayerID").val($("#userId").val());
+    });
+
+
+    function userEditorOP()
+    {
+      var str="";
+      $("input[name='USERDOOP']:checked").each(function(){
+         str+=$(this).val()+","
+      })
+
+      htmlobj = $.ajax({
+        url:"/adminGamePlayer/playerEditorOP",
+        type:"POST",
+        async:false, data:{ "OPStr":str ,"playerID": $("#userId").attr("value"),"OPTime":$("#OPTime").attr("value") }
+      });
+
+      if(htmlobj.responseText=="ok")
+      {
+        alert("操作成功");
+      }else {
+        alert("操作失败");
+      }
+
+    }
+  </script>
 {{end}}
