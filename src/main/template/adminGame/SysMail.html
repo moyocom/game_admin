@@ -1,11 +1,11 @@
 {{define "LeftMenu"}}
-<li><a href="/adminGame/index" class="active">发布公告</a></li>
-<li><a href="/adminGame/SysMail">发系统邮件</a></li>
+<li><a href="/adminGame/index" >发布公告</a></li>
+<li><a href="/adminGame/SysMail" class="active">发系统邮件</a></li>
 {{end}}
 
 
 {{define "Main"}}
- <h4>发布公告</h4>
+ <h4>发布系统邮件</h4>
  <hr/>
   <form method="post" action="/adminGame/AddNotice">
    <p><textarea style="width:640px; height:320px;" name="NoticeValue"></textarea></p>

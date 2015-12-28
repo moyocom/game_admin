@@ -3,6 +3,7 @@ package adminGamePlayer
 import (
 	"app"
 	"fmt"
+	. "lib/Util"
 	"model"
 	. "model"
 	"net/http"
@@ -17,6 +18,7 @@ func init() {
 	app.R.HandleFunc("/adminGamePlayer/playerList", app.AppHandler(admin_GamePlayerList, 1))
 	app.R.HandleFunc("/adminGamePlayer/Query", app.AppHandler(admin_GamePlayerQuery, 1))
 	app.R.HandleFunc("/adminGamePlayer/playerEditorOP", app.AppHandler(admin_GamePlayerEditorHandler, 1))
+	app.R.HandleFunc("/adminGamePlayer/QueryPlayerList", app.AppHandler(admin_QueryplayerList))
 	fmt.Println("load adminGamePlayer")
 }
 
@@ -28,6 +30,33 @@ func admin_GamePlayerEditor(w http.ResponseWriter, r *http.Request) {
 //玩家列表
 func admin_GamePlayerList(w http.ResponseWriter, r *http.Request) {
 	app.AdminTemplate(w, r, map[string]interface{}{}, "template/adminGamePlayer/PlayerList.html", true)
+}
+
+//查询玩家列表
+func admin_QueryplayerList(w http.ResponseWriter, r *http.Request) {
+
+	start := r.FormValue("start")
+	length := r.FormValue("length")
+	draw := r.FormValue("draw")
+
+	sqlStr := "select id,name,sex,lvl from player limit " + start + "," + length
+	rows, err := GameDB.Query(sqlStr)
+	CheckErr(err)
+	retStr := "{"
+	retStr += `"draw":` + draw + ","
+	retStr += `"recordsTotal":15,"recordsFiltered":15,`
+	retStr += `"data":[`
+	for rows.Next() {
+		playerData := &model.GamePlayer{}
+		err := rows.Scan(&playerData.Id, &playerData.Name, &playerData.Sex, &playerData.Lvl)
+		CheckErr(err)
+		retStr += `[` + strconv.Itoa(playerData.Id) + "," + `"` + playerData.Name + `",` +
+			strconv.Itoa(playerData.Sex) + "," + strconv.Itoa(playerData.Lvl) + "," + `"封禁"` + "],"
+
+	}
+	retStr = retStr[:len(retStr)-1]
+	retStr += "]}"
+	fmt.Fprint(w, retStr)
 }
 
 //玩家查询

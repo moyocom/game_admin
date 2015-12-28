@@ -1,0 +1,31 @@
+{{define "LeftMenu"}}
+<li><a href="/adminServer/index" class="active">服务器状态</a></li>
+{{end}}
+
+
+{{define "Main"}}
+ <h4>服务器状态</h4>
+ <hr/>
+ <table class="table table-bordered table-hover table-striped">
+<tr><td>Memory_total</td><td>{{.SeverState.Memory_total}}</td></tr>
+<tr><td>Memory_processes</td><td>{{.SeverState.Memory_processes}}</td></tr>
+<tr><td>Memory_processes_used</td><td>{{.SeverState.Memory_processes_used}}</td></tr>
+<tr><td>Memory_system</td><td>{{.SeverState.Memory_system}}</td></tr>
+<tr><td>Memory_atom</td><td>{{.SeverState.Memory_atom}}</td></tr>
+<tr><td>Memory_atom_used</td><td>{{.SeverState.Memory_atom_used}}</td></tr>
+<tr><td>Memory_binary</td><td>{{.SeverState.Memory_binary}}</td></tr>
+<tr><td>Memory_code</td><td>{{.SeverState.Memory_code}}</td></tr>
+<tr><td>Memory_ets</td><td>{{.SeverState.Memory_ets}}</td></tr>
+<tr><td>Process_count</td><td>{{.SeverState.Process_count}}</td></tr>
+<tr><td>Run_queue</td><td>{{.SeverState.Run_queue}}</td></tr>
+<tr><td>Context_switch</td><td>{{.SeverState.Context_switch}}</td></tr>
+<tr><td>Io_input_total</td><td>{{.SeverState.Io_input_total}}</td></tr>
+<tr><td>Io_output_total</td><td>{{.SeverState.Io_output_total}}</td></tr>
+<tr><td>Max_fds</td><td>{{.SeverState.Max_fds}}</td></tr>
+<tr><td>Wordsize</td><td>{{.SeverState.Wordsize}}</td></tr>
+</table>
+
+<script language="JavaScript">
+setTimeout('window.location.reload();',3000); //指定1秒刷新一次
+</script>
+{{end}}

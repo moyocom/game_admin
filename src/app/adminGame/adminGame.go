@@ -10,6 +10,7 @@ func init() {
 	app.Gapps = append(app.Gapps, app.Apps{Pkgname: "adminGame", Appname: "游戏管理"})
 	app.R.HandleFunc("/adminGame/index", app.AppHandler(admin_GameNotice, 1))
 	app.R.HandleFunc("/adminGame/AddNotice", app.AppHandler(admin_AddNotice, 1))
+	app.R.HandleFunc("/adminGame/SysMail", app.AppHandler(admin_SysMail, 1))
 	fmt.Println("load adminGame")
 }
 
@@ -27,6 +28,6 @@ func admin_AddNotice(w http.ResponseWriter, r *http.Request) {
 	http.Get(getStr)
 }
 
-/*
-http://127.0.0.1:8888/sys/notice?action=add&id=15&post_time=1305698204&plan_time=1305700000&end_time=1305910000&period=30&status=1&content=nihao
-*/
+func admin_SysMail(w http.ResponseWriter, r *http.Request) {
+	app.AdminTemplate(w, r, map[string]interface{}{}, "template/adminGame/SysMail.html", true)
+}
