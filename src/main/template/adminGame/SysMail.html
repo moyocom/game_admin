@@ -1,14 +1,88 @@
 {{define "LeftMenu"}}
-<li><a href="/adminGame/index" >发布公告</a></li>
-<li><a href="/adminGame/SysMail" class="active">发系统邮件</a></li>
+<li><a href="/adminGame/index" >系统公告</a></li>
+<li><a href="/adminGame/RollNotice" >滚动公告</a></li>
+<li><a href="/adminGame/SysMail" class="active">系统邮件</a></li>
 {{end}}
 
 
 {{define "Main"}}
  <h4>发布系统邮件</h4>
- <hr/>
-  <form method="post" action="/adminGame/AddNotice">
-   <p><textarea style="width:640px; height:320px;" name="NoticeValue"></textarea></p>
-   <p><input type="submit" value="提交" class="btn btn-primary btn-large" /></p>
-  </form>
+  <form method="POST" action="/adminGame/AddMail" id="MailFrom">
+  <table class="table">
+   <tr> <td>收件人</td><td>
+   <select onchange= "OnRecvRoleChange()" id="SendRole" name="RecvRoleType"><option value="0">全服</option><option value="1">角色Id</option></select> 
+   <select name="RecvCareer"  id="SendCareer">
+    <option value="-1">所有职业</option>
+    <option  value="0">职业0</option><option value="1">职业1</option><option value="2">职业2</option><option value="3">职业3</option></select>
+   <input id="RoleIdList"  name="RecvIdList" type="text" />
+   </td></tr>
+   <tr><td>发送时间</td><td><select onchange= "OnTimeChange()" name="SendTimeType" id="sendTimeSel"><option value="0">立即发送</option><option value="1">定时发送</option></select>
+   <input id="SenTimeTxt"  type="text" id="sendTime"/> <input type="hidden" id="SendTimeHidden"  name="SenTime"/> </td></tr>
+   <tr> <td>标题</td> <td><input type="text" name="Title"  style="width:500px"/></td> </tr>
+   <tr> <td>邮件内容</td> <td><textarea name="content" style="width:640px; height:150px;" name="NoticeValue"></textarea></td></tr>
+   <tr><td>包含货币</td> <td>
+   <select name="MoneyType"><option value="0">金币</option> <option value="1">绑定元宝</option><option>元宝</option></select>
+   <input name="MoneyNumber" type="text" /></td></tr>
+   <tr><td>包含物品</td> <td>物品ID<input name="goodsId" type="text" />&nbsp;&nbsp; 物品数量<input name="goodsNumber" type="text" />(只能填写一种)</td></tr>
+   <tr> <td colspan="2"><input type="button" onclick="OnSubmitFrom()" value="提交" class="btn btn-primary btn-large" /></td></tr>
+   </form>
+  </table>
+  
+  <script type="text/javascript">
+    hideCSS = {"visibility":"hidden","display":"none"};
+	showCSS = {"visibility":"visible","display":"inline"};
+    function OnRecvRoleChange()
+	{
+	   UpdateRecvState();
+	}
+	
+	function OnTimeChange()
+	{
+		UpdateTimeState();
+	}
+	
+	function UpdateTimeState()
+	{
+	  TimeSelVal = $("#sendTimeSel").val();
+	  if(TimeSelVal==0)
+	  { 
+		 $("#SenTimeTxt").css(hideCSS);  
+	  }
+	  else
+	  {
+		 $("#SenTimeTxt").css(showCSS);  
+	  }
+	}
+	
+	function UpdateRecvState()
+	{
+      selval = $("#SendRole").val()
+	  if(selval==1)
+	  {
+		  $("#SendCareer").css(hideCSS);
+		  $("#RoleIdList").css(showCSS);
+	  }
+	  else
+	  {
+		  $("#SendCareer").css(showCSS);
+		  $("#RoleIdList").css(hideCSS);
+      }
+	}
+	
+	function OnSubmitFrom()
+	{
+		strDate  = $("#SenTimeTxt").val();
+		timestamp2 = Date.parse(new Date(strDate));
+		$("#SendTimeHidden").val(timestamp2/1000); 
+		$("#MailFrom").submit();
+	}
+	
+	$(function() 
+	{
+	   cfg = {showSecond: true,stepHour: 1,stepMinute: 1,stepSecond: 1}
+       $( "#SenTimeTxt" ).datetimepicker(cfg);
+	   UpdateRecvState();
+	   UpdateTimeState();
+    });
+  </script>
 {{end}}

@@ -1,15 +1,167 @@
 {{define "LeftMenu"}}
 <li><a href="/adminUser/index" class="active">会员列表</a></li>
+<li><a href="/adminUser/userinfo">我的资料</a></li>
 {{end}}
 
 
 {{define "Main"}}
-<table class="table table-striped table-bordered table-condensed">
-<thead><tr><th>邮箱</th><th>用户名</th><th>用户权限</th><th width="100">操作</th></tr>
-</thead>
-<tbody>
+<input class="btn btn-primary" type="button"  data-toggle="modal" data-target="#PopNewUser"  value="添加新成员" style="margin:10px"/>
+<table  class="table table-striped table-bordered table-hover">
+<tr><th>用户名</th><th>昵称</th><th>邮箱</th><th>联系方式</th><th>用户权限</th><th width="300">操作</th></tr>
+
 {{$v:=.view}}
-{{range .ulist}}<tr><td>{{.Email}}</td><td>{{.Username}}</td><td>{{.Username}}</td><td><a href="#">删除</a></td></tr>{{end}}
-</tbody>
+{{$MyUser:=.user}}
+{{range .userlist}}<tr><td>{{.UserName}}</td><td>{{.NickName}}</td><td>{{.Email}}</td><td>{{.Contact}}</td>
+   <td><select disabled="disabled"  value="{{.UserType}}"><option value="0" {{if eq .UserType 0}}selected="selected"{{end}}>超级管理员</option><option value="1" {{if eq .UserType 1}}selected="selected"{{end}}>管理员</option></select> </td>
+<td>{{if gt .UserType  $MyUser.UserType}}<a href="javascript:if(confirm('确定删除这个用户吗')){ window.location.href ='/adminUser/deleteUser?Id={{.ID}}';   }">删除</a>&nbsp;&nbsp;
+    <a href="javascript:ShowEditorUser({{.ID}},'{{.UserName}}','{{.NickName}}','{{.Email}}','{{.Contact}}',{{.UserType}})">修改</a>{{end}}</td></tr>{{end}}
+
 </table>
+    <div id="PopNewUser" class="modal hide fade">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3 style="text-align:center">添加新成员</h3>
+      </div>
+      <div class="modal-body">
+        <form id="AddNewUseForm" action="/adminUser/addNewUser" method="POST">
+         <table class="table">
+          <tr><td>用户名</td><td><input type="text" name="UserName"  placeholder="账号 (不可为空)"/></td></tr>
+          <tr><td>昵称</td><td><input type="text"   name="NickName"    placeholder="昵称 (不可为空)"/></td></tr>
+          <tr><td>权限等级</td><td><select name="UserType"><option value="1">管理员</option></select></td></tr>
+          <tr><td>默认密码</td><td><input type="text" name="UserPwd" value="123456"  placeholder="密码 (不可为空)"/></td></tr>
+          <tr><td>邮箱</td><td><input type="text" name="Email" /></td></tr>
+          <tr><td>联系方式</td><td><input type="text" name="Contact" /></td></tr>
+         </table>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal" aria-hidden="true">取消</a>
+        <a href="javascript:SubAddNewUser()" class="btn btn-primary">确定添加</a>
+      </div>
+        </form>
+    </div>
+
+<div id="EditorUser" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3 style="text-align:center">修改玩家信息</h3>
+    </div>
+    <div class="modal-body">
+        <form id="EditorUserForm" action="/adminUser/updateUser" method="POST">
+            <input type="hidden" id="EditorUserId" name="id"/>
+            <table class="table">
+                <tr><td>用户名</td><td id="EditorUserName"></td></tr>
+                <tr><td>昵称</td><td><input type="text" id="EditorNickName" name="UpdateNickName" placeholder="昵称 (不可为空)" /></td></tr>
+                <tr><td>权限等级</td><td><select id="EditorUserType" name="UpdateUserType"><option value="0">超级管理员</option><option value="1">管理员</option></select></td></tr>
+                <tr><td>邮箱</td><td><input id="EditorEmail" type="text" name="UpdateEmail" /></td></tr>
+                <tr><td>联系方式</td><td><input id="EditorContact" type="text" name="UpdateContact" /></td></tr>
+            </table>
+    </div> 
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal" aria-hidden="true">取消</a>
+        <a href="javascript:SubEdtorUser()" class="btn btn-primary">确定修改</a>
+    </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+function IsNull(strName)
+{
+    curVal = $("[name="+strName+"]").val();
+	if(curVal==null||curVal=="")
+	{
+		return true;
+	}
+	return false;
+}
+function IsIdNull(strId)
+{
+    curVal = $("#"+strId).val();
+    if(curVal==null||curVal=="")
+    {
+        return true;
+    }
+    return false;
+}
+function WhileVal(fn,val,arr)
+{
+    	
+	for(i=0;i<arr.length;i++)
+	{
+		if(fn(arr[i]) == val)
+		{
+			return arr[i];
+		}
+	}
+	return null;
+}
+
+
+function SubAddNewUser()
+{
+	
+	val = WhileVal(IsNull,true,["UserName","NickName","UserPwd"]);
+	if(val != null)
+	{
+	   	alert(val+"不可为空");
+		return
+	}
+	
+	NameUrlData = function(Name){return Name+"="+$("#[name = "+Name+"]").val();}
+    
+	postStr = NameUrlData("UserName")+"&" + 
+	          NameUrlData("NickName")+"&" +
+			  NameUrlData("UserType")+"&" + 
+			  NameUrlData("Email") +"&" +
+			  NameUrlData("Contact");
+	$.ajax({
+	   url : "/adminUser/addNewUser",async:false, type:"POST", data : postStr,
+	   success: function(data){
+		if(data=="ok")
+		{
+		  $('#PopNewUser').modal('hide');
+		  window.location.reload();
+		}
+		else
+		{
+			alert(data);
+		}
+	   },
+	   error: function(data){
+		   alert("添加失败");
+	   }
+	});
+}
+var myRoleType = {{.user.UserType}}; 
+function ShowEditorUser(id,username,nickname,email,contact,usertype)
+{
+    $("#EditorUserName").html(username);
+    $("#EditorNickName").val(nickname);
+    $("#EditorEmail").val(email);
+    $("#EditorContact").val(contact);
+    $("#EditorNickName").val(nickname);
+    $("#EditorUserType").val(usertype);
+    $("#EditorUserId").val(id);
+    UserTypeElemArr = $("#EditorUserType").children();
+    for (i = 0; i < UserTypeElemArr.length; i++)
+    {
+        if(UserTypeElemArr[i].value <= myRoleType)
+        {
+           UserTypeElemArr[i].remove();
+        }
+    }
+    $("#EditorUser").modal('show');
+}
+
+function SubEdtorUser()
+{
+    val = WhileVal(IsIdNull,true,["EditorNickName"]);
+    if(val != null)
+    {
+        alert(val+"不可为空");
+        return
+    }
+    $("#EditorUserForm").submit();
+}
+</script>
 {{end}}
+  

@@ -2,7 +2,9 @@ package Util
 
 import (
 	"html/template"
+	"io/ioutil"
 	"net/http"
+	"time"
 )
 
 func ExitMsg(w http.ResponseWriter, args ...string) {
@@ -20,4 +22,15 @@ func CheckErr(err interface{}) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func TimeInt2Str(intTime int64) string {
+	str_time := time.Unix(int64(intTime), 0).Format("2006-01-02 15:04:05")
+	return str_time
+}
+
+func GetUrlString(url string) string {
+	resp, _ := http.Get(url)
+	bytedata, _ := ioutil.ReadAll(resp.Body)
+	return string(bytedata)
 }

@@ -1,11 +1,23 @@
 body{ padding: 0px; margin:0px; background: url("../skins/admin/bg.png"); font-family: 'Helvetica Neue', 'Hiragino Sans GB', 'Segoe UI', 'Microsoft Yahei', ΢���ź�, Tahoma, Arial, STHeiti, sans-serif;}
-#header{ background: url("../skins/admin/header.png")  repeat-x 0 -20px; height: 50px;}
-#logo{ font-size: 25px; color: #fff; font-weight: bold; padding: 10px; float: left; margin-top:8px;}
-#topmenu{ margin: 0px;  float: left; padding-top: 25px; margin-left:20px;}
-#topmenu li{ list-style: none; float: left; margin-right: 20px;}
-#topmenu li a{ text-decoration: none; color: #ccc; font-size: 14px; font-weight:bold}
+#header
+{
+ height: 50px; background: #0767c8; background: -webkit-linear-gradient(top,#086ed5,#055db5);
+background: linear-gradient(to bottom,#086ed5,#055db5);
+border-bottom: 1px solid #044e97;
+box-shadow: 0 1px 2px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.15);
+}
+#logo a{ font-size: 25px; color: #fff; padding: 10px; float: left; margin-top:5px; display: block;text-decoration: none;}
+#topmenu{ margin: 0px;  float: left; margin-left:20px;}
+#topmenu li{ list-style: none; float: left; }
+#topmenu li a{ display: block; margin: 5px; padding-top:12px; padding-left: 8px;padding-right: 8px;height: 28px; text-decoration: none; color: #f2f4f5; font-size: 14px; text-shadow: 0 1px 1px rgba(0,0,0,.12);}
 #topmenu li a:hover{ color: #fff}
-#main{ margin:10px;}
+#topmenu .current{
+ background: #075fb6;
+background: -webkit-linear-gradient(top,#055fb8,#095fb3);
+background: linear-gradient(to bottom,#055fb8,#095fb3);
+box-shadow: inset 0 0 2px rgba(0,0,0,.12);}
+
+#main{ margin-top:10px; }
 #leftmenu{ background:#D6D8DB;width:120px; height:400px; border:1px solid #c7cacc;box-shadow: inset 0 0px 3px #CCC;border-radius: 4px; float:left}
 #leftmenu ul{padding: 10px 10px; font-size:14px; margin-top:0px; padding-left:0px; margin-left:10px;}
 #leftmenu ul li{ list-style:none; margin:10px 0; text-align:left; padding-left:0px;}
@@ -21,3 +33,35 @@ body{ padding: 0px; margin:0px; background: url("../skins/admin/bg.png"); font-f
 .table img{ max-height:20px; max-width:20px;}
 
 #othermsg{ float:right; margin-top:20px; margin-right:70px; color:#ccc}
+
+
+.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
+.ui-timepicker-div dl { text-align: left; }
+.ui-timepicker-div dl dt { float: left; clear:left; padding: 0 0 0 5px; }
+.ui-timepicker-div dl dd { margin: 0 10px 10px 40%; }
+.ui-timepicker-div td { font-size: 90%; }
+.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
+.ui-timepicker-div .ui_tpicker_unit_hide{ display: none; }
+
+.ui-timepicker-div .ui_tpicker_time .ui_tpicker_time_input { background: none; color: inherit; border: none; outline: none; border-bottom: solid 1px #555; width: 95%; }
+.ui-timepicker-div .ui_tpicker_time .ui_tpicker_time_input:focus { border-bottom-color: #aaa; }
+
+.ui-timepicker-rtl{ direction: rtl; }
+.ui-timepicker-rtl dl { text-align: right; padding: 0 5px 0 0; }
+.ui-timepicker-rtl dl dt{ float: right; clear: right; }
+.ui-timepicker-rtl dl dd { margin: 0 40% 10px 10px; }
+
+/* Shortened version style */
+.ui-timepicker-div.ui-timepicker-oneLine { padding-right: 2px; }
+.ui-timepicker-div.ui-timepicker-oneLine .ui_tpicker_time, 
+.ui-timepicker-div.ui-timepicker-oneLine dt { display: none; }
+.ui-timepicker-div.ui-timepicker-oneLine .ui_tpicker_time_label { display: block; padding-top: 2px; }
+.ui-timepicker-div.ui-timepicker-oneLine dl { text-align: right; }
+.ui-timepicker-div.ui-timepicker-oneLine dl dd, 
+.ui-timepicker-div.ui-timepicker-oneLine dl dd > div { display:inline-block; margin:0; }
+.ui-timepicker-div.ui-timepicker-oneLine dl dd.ui_tpicker_minute:before,
+.ui-timepicker-div.ui-timepicker-oneLine dl dd.ui_tpicker_second:before { content:':'; display:inline-block; }
+.ui-timepicker-div.ui-timepicker-oneLine dl dd.ui_tpicker_millisec:before,
+.ui-timepicker-div.ui-timepicker-oneLine dl dd.ui_tpicker_microsec:before { content:'.'; display:inline-block; }
+.ui-timepicker-div.ui-timepicker-oneLine .ui_tpicker_unit_hide,
+.ui-timepicker-div.ui-timepicker-oneLine .ui_tpicker_unit_hide:before{ display: none; }  

@@ -3,18 +3,19 @@ package adminGamePlayer
 import (
 	"app"
 	"fmt"
+	"io/ioutil"
 	. "lib/Util"
 	"model"
 	. "model"
 	"net/http"
 	"strconv"
 	"strings"
-	"time"
+	//"time"
 )
 
 func init() {
-	app.Gapps = append(app.Gapps, app.Apps{Pkgname: "adminGamePlayer", Appname: "游戏玩家管理"})
-	app.R.HandleFunc("/adminGamePlayer/index", app.AppHandler(admin_GamePlayerEditor, 1))
+	app.Gapps = append(app.Gapps, app.Apps{Pkgname: "adminGamePlayer", Appname: "玩家管理"})
+	app.R.HandleFunc("/adminGamePlayer/index", app.AppHandler(admin_GamePlayerList, 1))
 	app.R.HandleFunc("/adminGamePlayer/playerList", app.AppHandler(admin_GamePlayerList, 1))
 	app.R.HandleFunc("/adminGamePlayer/Query", app.AppHandler(admin_GamePlayerQuery, 1))
 	app.R.HandleFunc("/adminGamePlayer/playerEditorOP", app.AppHandler(admin_GamePlayerEditorHandler, 1))
@@ -39,22 +40,15 @@ func admin_QueryplayerList(w http.ResponseWriter, r *http.Request) {
 	length := r.FormValue("length")
 	draw := r.FormValue("draw")
 
-	sqlStr := "select id,name,sex,lvl from player limit " + start + "," + length
-	rows, err := GameDB.Query(sqlStr)
-	CheckErr(err)
 	retStr := "{"
 	retStr += `"draw":` + draw + ","
-	retStr += `"recordsTotal":15,"recordsFiltered":15,`
+	maxNumber := strconv.Itoa(model.GamePlayer_MaxNumber())
+	retStr += `"recordsTotal":` + maxNumber + `,"recordsFiltered":"` + maxNumber + `",`
 	retStr += `"data":[`
-	for rows.Next() {
-		playerData := &model.GamePlayer{}
-		err := rows.Scan(&playerData.Id, &playerData.Name, &playerData.Sex, &playerData.Lvl)
-		CheckErr(err)
-		retStr += `[` + strconv.Itoa(playerData.Id) + "," + `"` + playerData.Name + `",` +
-			strconv.Itoa(playerData.Sex) + "," + strconv.Itoa(playerData.Lvl) + "," + `"封禁"` + "],"
 
-	}
-	retStr = retStr[:len(retStr)-1]
+	players := GamePlayer_Table(start, length)
+	jsonStr := GamePlayerTable2Json(players)
+	retStr += jsonStr
 	retStr += "]}"
 	fmt.Fprint(w, retStr)
 }
@@ -87,17 +81,27 @@ func admin_GamePlayerEditorHandler(w http.ResponseWriter, r *http.Request) {
 	if OPTime == "" {
 		OPTime = "1"
 	}
-	OPTimeInt, _ := strconv.Atoi(OPTime)
 	for i := 0; i < len(strArrs); i++ {
 		//禁言.
 		if strArrs[i] == "vJinYan" {
-			endTime := time.Now().Add(time.Hour * time.Duration(OPTimeInt))
-			execStr := APIServer + "/api/user?msg=1032&end_time=" + strconv.FormatInt(endTime.Unix(), 10) + "&id=" + playerID
-			http.Get(execStr)
+			getStr := GetUrlString(APIServer + "/api/user?msg=1032&id=" + playerID + "&time=" + OPTime)
+			if getStr == "0" {
+				fmt.Fprint(w, "ok")
+			} else {
+				fmt.Fprint(w, getStr)
+			}
+			return
 		}
+
 		//封号
 		if strArrs[i] == "vFengHao" {
-
+			getStr := GetUrlString(APIServer + "/api/user?msg=1034&id=" + playerID + "&time=" + OPTime)
+			if getStr == "0" {
+				fmt.Fprint(w, "ok")
+			} else {
+				fmt.Fprint(w, getStr)
+			}
+			return
 		}
 		//封IP
 		if strArrs[i] == "vFengIP" {
@@ -105,15 +109,35 @@ func admin_GamePlayerEditorHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		//踢人
 		if strArrs[i] == "vTiRen" {
-
+			resp, _ := http.Get(APIServer + "/api/user?msg=1031&id=" + r.FormValue("playerID"))
+			bydata, _ := ioutil.ReadAll(resp.Body)
+			if string(bydata) == "0" {
+				model.UpdateOnlinePlayers()
+				fmt.Fprint(w, "ok")
+			} else {
+				fmt.Fprint(w, string(bydata))
+			}
+			return
 		}
 
 		if strArrs[i] == "vReJinyan" {
-
+			getStr := GetUrlString(APIServer + "/api/user?msg=1033&id=" + playerID)
+			if getStr == "0" {
+				fmt.Fprint(w, "ok")
+			} else {
+				fmt.Fprint(w, getStr)
+			}
+			return
 		}
 
 		if strArrs[i] == "vReFengHao" {
-
+			getStr := GetUrlString(APIServer + "/api/user?msg=1035&id=" + playerID)
+			if getStr == "0" {
+				fmt.Fprint(w, "ok")
+			} else {
+				fmt.Fprint(w, getStr)
+			}
+			return
 		}
 
 		if strArrs[i] == "vReFengIP" {

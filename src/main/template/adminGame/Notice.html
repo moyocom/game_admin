@@ -1,14 +1,18 @@
 {{define "LeftMenu"}}
-<li><a href="/adminGame/index" class="active">发布公告</a></li>
-<li><a href="/adminGame/SysMail">发系统邮件</a></li>
+<li><a href="/adminGame/index" class="active">系统公告</a></li>
+<li><a href="/adminGame/RollNotice" >滚动公告</a></li>
+<li><a href="/adminGame/SysMail">系统邮件</a></li>
 {{end}}
 
 
 {{define "Main"}}
- <h4>发布公告</h4>
- <hr/>
-  <form method="post" action="/adminGame/AddNotice">
-   <p><textarea style="width:640px; height:320px;" name="NoticeValue"></textarea></p>
-   <p><input type="submit" value="提交" class="btn btn-primary btn-large" /></p>
+ <h4>系统公告</h4>
+  <form method="POST" action="/adminGame/index">
+   <input type="hidden" name="Id" value="{{.notice.Id}}" />
+   <table class="table">
+   <tr> <td>标题</td> <td><input type="text" name="Title"  value="{{.notice.Title}}"/></td> </tr>
+   <tr><td>正文</td> <td><textarea name="Content" style="width:640px; height:320px;" name="NoticeValue">{{.notice.Content}}</textarea></td></tr>
+   <tr><td><input type="submit" value="提交" class="btn btn-primary btn-large" /></td> <td></td></tr>
+   </table>
   </form>
 {{end}}

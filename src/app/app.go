@@ -1,12 +1,13 @@
 package app
 
 import (
-	///"fmt"
+	"fmt"
 	"html/template"
 	. "lib/Util"
 	"lib/mux"
 	"model"
 	"net/http"
+	"strings"
 )
 
 var R *mux.Router
@@ -50,12 +51,26 @@ type View struct {
 
 func AdminTemplate(w http.ResponseWriter, r *http.Request, data map[string]interface{}, file string, ShowLeftMenu bool) {
 	t, err := template.ParseFiles("template/adminbase.html", file)
-	CheckErr(err)
+	if err != nil {
+		fmt.Println(err)
+	}
 	data["apps"] = Gapps
 	data["view"] = &View{}
+
+	if r.RequestURI == "/" {
+		data["curapp"] = "index"
+	} else {
+		arr := strings.Split(r.RequestURI, "/")
+		data["curapp"] = arr[1]
+	}
+
 	if ShowLeftMenu == true {
 		data["ShowLeftMenu"] = true
 	}
+
+	data["TimeInt2Str"] = TimeInt2Str
+	data["CurServer"] = model.APIServer
+
 	data["user"] = model.AdminUser_CurUser(w, r)
 	t.Execute(w, data)
 }

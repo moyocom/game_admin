@@ -1,5 +1,11 @@
 package model
 
+import (
+	"database/sql"
+	"fmt"
+	. "lib/lisp_core"
+)
+
 //{"memory_total":143883448,"memory_processes":96757568,"memory_processes_used":96751880,"memory_system":47125880,
 //"memory_atom":695185,"memory_atom_used":668905,"memory_binary":4148080,"memory_code":16526191,"memory_ets":12952992,
 //"process_count":435,"run_queue":1,
@@ -22,4 +28,46 @@ type ServerState struct {
 	Io_output_total       int64 `json:"io_output_total"`
 	Max_fds               int64 `json:"max_fds"`
 	Wordsize              int64 `json:"wordsize"`
+}
+
+type ServerData struct {
+	Id      int
+	Name    string
+	Desc    string
+	IP      string
+	Port    string
+	DBUser  string
+	DBPwd   string
+	State   int
+	AddTime int64
+}
+
+func ServerData_Table() []*ServerData {
+	query, _ := SQLDB.Query("select * from go_server_list")
+	retData := make([]*ServerData, 0)
+	for query.Next() {
+		serverData := goQueryServerData2Struct(query)
+		retData = append(retData, serverData)
+	}
+	return retData
+}
+
+func ServerData_ById(id int) *ServerData {
+	sqlStr := "select * from go_server_list where id = " + Str(id)
+	fmt.Println(sqlStr)
+	query := SQLDB.QueryRow(sqlStr)
+	retServerData := &ServerData{}
+	err := query.Scan(&retServerData.Id, &retServerData.Name, &retServerData.Desc, &retServerData.IP, &retServerData.Port, &retServerData.DBUser,
+		&retServerData.DBPwd, &retServerData.State, &retServerData.AddTime)
+	if err != nil {
+		fmt.Println(err, "query err")
+	}
+	return retServerData
+}
+
+func goQueryServerData2Struct(row *sql.Rows) *ServerData {
+	retServerData := &ServerData{}
+	row.Scan(&retServerData.Id, &retServerData.Name, &retServerData.Desc, &retServerData.IP, &retServerData.Port, &retServerData.DBUser,
+		&retServerData.DBPwd, &retServerData.State, &retServerData.AddTime)
+	return retServerData
 }
