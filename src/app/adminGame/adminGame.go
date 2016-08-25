@@ -14,17 +14,29 @@ import (
 
 func init() {
 	app.Gapps = append(app.Gapps, app.Apps{Pkgname: "adminGame", Appname: "游戏管理"})
-	app.R.HandleFunc("/adminGame/index", app.AppHandler(admin_GameNotice, 1))
+	app.R.HandleFunc("/adminGame/index", app.AppHandler(admin_WebGameNotice, 1))
 	app.R.HandleFunc("/adminGame/AddNotice", app.AppHandler(admin_AddNotice, 1))
 	app.R.HandleFunc("/adminGame/SysMail", app.AppHandler(admin_SysMail, 1))
 	app.R.HandleFunc("/adminGame/RollNotice", app.AppHandler(admin_RollNotice, 1))
 	app.R.HandleFunc("/adminGame/RollNoticeOpt", app.AppHandler(admin_NoticeOpt, 1))
 	app.R.HandleFunc("/adminGame/AddMail", app.AppHandler(admin_AddMail, 1))
+	app.R.HandleFunc("/GameNotice", app.AppHandler(admin_GameNotice))
 	fmt.Println("load adminGame")
 }
 
-//游戏公告
+//外部公告接口
 func admin_GameNotice(w http.ResponseWriter, r *http.Request) {
+	if r.FormValue("serverId") != "" {
+		id := r.FormValue("serverId")
+		notice := model.Notice_GetById(Int(id))
+		if notice != nil {
+			fmt.Fprintf(w, notice.Content)
+		}
+	}
+}
+
+//游戏公告
+func admin_WebGameNotice(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		r.FormValue("Title")
 		r.FormValue("Content")

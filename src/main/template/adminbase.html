@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css" />
 <link rel="stylesheet" href="/static/css/admin.css" />
@@ -9,6 +10,7 @@
 <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/static/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="/static/js/jquery-ui-timepicker-addon.js"></script>
+
 <title>横扫三国后台管理</title>
 </head>
 <body>
@@ -24,7 +26,7 @@
     
     <li style="margin-left:150px"><a href="#">当前服务器 {{.CurServer}}</a></li>
   </ul>
-  <div id="othermsg">{{if .user}}{{.user.UserTypeStr}}:{{.user.UserName}}{{end}}</div>
+  <div id="othermsg">{{if .user}}{{.user.UserTypeStr}}:{{.user.UserName}} &nbsp;&nbsp;<a href="/adminUser/LoginOut">[注销]</a>{{end}}</div>
  </div>
 
  <div id="main">

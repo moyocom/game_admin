@@ -5,6 +5,7 @@
 
 
 {{define "Main"}}
+<script type="text/javascript" src="/static/js/adminbase.js"></script>
 <input class="btn btn-primary" type="button"  data-toggle="modal" data-target="#PopNewUser"  value="添加新成员" style="margin:10px"/>
 <table  class="table table-striped table-bordered table-hover">
 <tr><th>用户名</th><th>昵称</th><th>邮箱</th><th>联系方式</th><th>用户权限</th><th width="300">操作</th></tr>
@@ -64,42 +65,10 @@
 </div>
 
 <script type="text/javascript">
-function IsNull(strName)
-{
-    curVal = $("[name="+strName+"]").val();
-	if(curVal==null||curVal=="")
-	{
-		return true;
-	}
-	return false;
-}
-function IsIdNull(strId)
-{
-    curVal = $("#"+strId).val();
-    if(curVal==null||curVal=="")
-    {
-        return true;
-    }
-    return false;
-}
-function WhileVal(fn,val,arr)
-{
-    	
-	for(i=0;i<arr.length;i++)
-	{
-		if(fn(arr[i]) == val)
-		{
-			return arr[i];
-		}
-	}
-	return null;
-}
-
-
 function SubAddNewUser()
 {
 	
-	val = WhileVal(IsNull,true,["UserName","NickName","UserPwd"]);
+	val = WhileVal(IsNameNull,true,["UserName","NickName","UserPwd"]);
 	if(val != null)
 	{
 	   	alert(val+"不可为空");
@@ -111,6 +80,7 @@ function SubAddNewUser()
 	postStr = NameUrlData("UserName")+"&" + 
 	          NameUrlData("NickName")+"&" +
 			  NameUrlData("UserType")+"&" + 
+			  NameUrlData("UserPwd")+"&" + 
 			  NameUrlData("Email") +"&" +
 			  NameUrlData("Contact");
 	$.ajax({

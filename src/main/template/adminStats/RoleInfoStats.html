@@ -1,0 +1,63 @@
+{{define "LeftMenu"}}
+<li><a href="/adminStats/index" >充值统计</a></li>
+<li><a href="/adminStats/mission" >任务统计</a></li>
+<li><a href="/adminStats/roleInfo" class="active">角色信息</a></li>
+<li><a href="/adminStats/LTVStats">LTV统计</a></li>
+{{end}}
+
+{{define "Main"}}
+<h4>角色信息</h4>
+<link rel="stylesheet" type="text/css" href="/static/DTmedia/css/jquery.dataTables.css" />
+<script type="text/javascript" src="/static/DTmedia/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="/static/js/adminbase.js"></script>
+<link  rel="stylesheet" type="text/css" href="/static/jquery-ui/jquery-ui.theme.min.css" />
+<div id="Tabs">
+<ul>
+ <li><a href="#tabs-1">登录登出</a></li>
+ 
+ <li><a href="#tabs-2">升级信息</a></li>
+ 
+ <li><a href="#tabs-3">死亡信息</a></li>
+ 
+ <li><a href="#tabs-4">切换地图</a></li>
+ 
+ <li><a href="#tabs-5">更改PK</a></li>
+</ul>
+<div id="tabs-1">
+ <table id="loginTable" width="100%" class="table table-striped table-bordered table-hover" >
+  <thead><th>时间</th><th>玩家Id</th><th>IP</th></thead>
+ </table>
+</div>
+<div id="tabs-2">
+<table id="LevelTable" width="100%" class="table table-striped table-bordered table-hover" >
+  <thead><th>时间</th><th>玩家Id</th><th>等级</th></thead>
+ </table>
+</div>
+<div id="tabs-3">
+<table id="DieTable" width="100%" class="table table-striped table-bordered table-hover" >
+  <thead><th>时间</th><th>玩家Id</th><th>IP</th></thead>
+ </table>
+</div>
+<div id="tabs-4">
+<table id="ChangeMapTable" width="100%" class="table table-striped table-bordered table-hover" >
+  <thead><th>时间</th><th>玩家Id</th><th>地图</th></thead>
+ </table>
+</div>
+<div id="tabs-5">
+<table id="ChangePKTable" width="100%" class="table table-striped table-bordered table-hover" >
+  <thead><th>时间</th><th>玩家Id</th><th>PK模式</th></thead>
+ </table>
+</div>
+</div>
+<script type="text/javascript">
+ window.onload = function()
+ {
+    $("#Tabs").tabs();	 
+	InitDataTable("#loginTable","/adminStats/roleInfoQuery?type=login");
+	InitDataTable("#LevelTable","/adminStats/roleInfoQuery?type=level");
+	InitDataTable("#DieTable","/adminStats/roleInfoQuery?type=die");
+	InitDataTable("#ChangeMapTable","/adminStats/roleInfoQuery?type=changemap");
+	InitDataTable("#ChangePKTable","/adminStats/roleInfoQuery?type=changePK");
+ }
+</script>
+{{end}}

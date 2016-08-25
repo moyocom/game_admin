@@ -1,0 +1,117 @@
+{{define "LeftMenu"}}
+<li><a href="/adminStats/index"   class="active">充值统计</a></li>
+<li><a href="/adminStats/mission">任务统计</a></li>
+<li><a href="/adminStats/roleInfo">角色信息</a></li>
+<li><a href="/adminStats/LTVStats">LTV统计</a></li>
+{{end}}
+
+{{define "Main"}}
+<link rel="stylesheet" type="text/css" href="/static/DTmedia/css/jquery.dataTables.css" />
+<script type="text/javascript" src="/static/DTmedia/js/jquery.dataTables.js"></script>
+<style type="text/css">
+.filterInput
+{ margin-top:10px;
+  width:110px;
+}
+.dataTables_filter input { width:700px;}
+</style>
+ <h4>充值统计</h4>
+
+ <table id="PayTable" width="100%" class="table table-striped table-bordered table-hover" >
+ <thead><th height="20px">时间(:time)<br /><select id="TimeType" class="filterInput" ><option value=">">大于</option><option value="<">小于</option></select><input type="text" id="Time" class="filterInput"  /> </th>
+ <th>玩家ID(:playerId)<br/><input type="text" id="PlayerId" class="filterInput" /></th>
+ <th width="250px">金额(:amount)<br/>
+ <select class="filterInput" id="AmountType">
+ <option value="=">等于</option>
+ <option value=">">大于</option><option value="<">小于</option></select><input id="Amount" type="text" class="filterInput"  /> </th>
+ <th>金币类型(:moneyType)<br/><input type="text" id="MoneyType" class="filterInput"  /></th>
+ <th>获得类型(:payType)<br/><input type="text"  id="GetWay" class="filterInput" /></th></thead>
+ 
+ </table>
+
+ <script type="text/javascript">
+ var dataTable  = null;
+ var setting = null;
+  $(document).ready(function() {
+	 setting =  {
+           "bPaginate": true,      //翻页功能
+           "bLengthChange": true, //改变每页显示数据数量
+           "bFilter": true, //过滤功能
+           "bSort": true, //排序功能
+           "bInfo": true,//页脚信息
+           "bAutoWidth": true,//自动宽度
+            ajax: "/adminStats/QueryPayStats",
+            "processing": true,
+            "serverSide": true,
+            "bSort": false,
+            "lengthMenu": [[17,15, 10], [17,15,10]],
+            "createdRow":function(row,data,index) 
+            {
+			   $('td',row).eq(3).html(GoldTyp2StrMap[($('td',row).eq(3).html())]);
+               $('td', row).eq(4).html(PayTyp2StrMap[$('td', row).eq(4).html()]);
+            }
+      }
+	  
+     dataTable = $("#PayTable").dataTable(setting);
+     $(".dataTables_filter input").attr("id","searchBox");
+  });
+
+$(".filterInput").blur(function(eventData)
+{
+	var EventInputId = eventData.currentTarget.getAttribute("id");
+	var FilterCondition = GenFilterCondition();
+	if(FilterCondition!="")
+	{
+	   dataTable.fnFilter(FilterCondition);
+	}
+	else
+	{
+	   dataTable.fnFilter("");
+	}
+	
+});
+
+function GenFilterCondition()
+{  
+   var retStrConditions = ""; 
+   var timeStr = $.trim($("#Time").val());
+   if(timeStr!="")
+   {
+	  retStrConditions += " and time" + $("#TimeType").val() + timeStr;
+   }
+   var playerIdStr = $.trim($("#PlayerId").val());
+   if(playerIdStr!="")
+   {
+	  retStrConditions += "and var2 = \""+playerIdStr+"\"";
+   }
+   var AmountStr = $.trim($("#Amount").val());
+   if(AmountStr!="")
+   {
+	  retStrConditions += "and var3 " + $("#AmountType").val() + "\""+AmountStr+"\"";
+   }
+   var MoneyTypeStr = $.trim($("#MoneyType").val());
+   if(MoneyTypeStr!="")
+   {
+	  retStrConditions += "and var4 = \""+MoneyTypeStr+"\"";
+   }
+   var GetWayStr = $.trim($("#GetWay").val());
+   if(GetWayStr!="")
+   {
+	  retStrConditions += "and var5 = \""+GetWayStr+"\"";
+   }
+   return retStrConditions;
+}
+var PayTyp2StrMap  = {"1":"充值(1)","2":"买卖(2)","3":"邮件(3)","4":"任务(4)","5":"交易(5)","6":"礼包(6)","12":"打怪获得(12)"};
+var GoldTyp2StrMap = {"0":"金币(0)","1":"元宝(1)","2":"绑定元宝(2)"};
+</script>
+{{end}} 
+
+
+
+
+
+
+
+
+
+

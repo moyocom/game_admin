@@ -21,6 +21,7 @@ func init() {
 	app.R.HandleFunc("/adminUser/userinfo", app.AppHandler(admin_UserInfo))
 	app.R.HandleFunc("/adminUser/deleteUser", app.AppHandler(admin_DeleteUser, 1))
 	app.R.HandleFunc("/adminUser/updateUser", app.AppHandler(admin_UpdateUser, 1))
+	app.R.HandleFunc("/adminUser/LoginOut", app.AppHandler(AdminUser_LoginOut, 1))
 	fmt.Println("load adminUser")
 }
 
@@ -71,12 +72,19 @@ func admin_UserInfo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method == "POST" && curUser != nil {
+		r.ParseForm()
+		fmt.Println("Post userinfo")
 		NickNameSql := ""
 		if forms.Reg_user(r.FormValue("NickName")) {
 			NickNameSql = "NickName='" + r.FormValue("NickName") + "'"
 		}
-		pwdSql, _ := getChangePwdSql(curUser.UserPwd, r.FormValue("OldPwd"), r.FormValue("CheckNewPwd"), r.FormValue("NewPwd"))
-
+		fmt.Println("NickNameSql")
+		pwdSql, err := getChangePwdSql(curUser.UserPwd, r.FormValue("OldPwd"), r.FormValue("CheckNewPwd"), r.FormValue("NewPwd"))
+		if err != "" {
+			ExitMsg(w, err, "/adminUser/userinfo")
+			return
+		}
+		fmt.Println("pwdsql:=" + pwdSql)
 		model.SQLDB.Exec("update go_adminuser set " +
 			NickNameSql + pwdSql +
 			",Email='" + r.FormValue("Email") + "'" +
@@ -92,12 +100,13 @@ func admin_UserInfo(w http.ResponseWriter, r *http.Request) {
 
 func getChangePwdSql(trueOldPwd string, oldPwd string, checkNewPwd string, newPwd string) (string, string) {
 	if oldPwd == "" {
-		return "", ""
+		fmt.Println("OldPwd is nil", trueOldPwd)
+		return "", "旧密码为空"
 	}
 	if forms.Tomd5(oldPwd) != trueOldPwd {
 		return "", "旧密码错误"
 	}
-	if newPwd != oldPwd {
+	if newPwd != checkNewPwd {
 		return "", "两次密码输入不一致"
 	}
 
@@ -126,7 +135,7 @@ func admin_AddNewUser(w http.ResponseWriter, r *http.Request) {
 	model.AdminUser_AddNewUser(&model.AdminUser{
 		UserName:      r.FormValue("UserName"),
 		NickName:      r.FormValue("NickName"),
-		UserPwd:       r.FormValue("UserPwd"),
+		UserPwd:       forms.Tomd5(r.FormValue("UserPwd")),
 		UserType:      forms.Toint(r.FormValue("UserType")),
 		Email:         r.FormValue("Email"),
 		Contact:       r.FormValue("Contact"),
@@ -166,4 +175,11 @@ func admin_UpdateUser(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(updateMap)
 	model.AdminUser_Update(r.FormValue("id"), updateMap)
 	http.Redirect(w, r, "/adminUser/index", http.StatusFound)
+}
+
+/*==============================adminUser/LoginOut=========================================*/
+func AdminUser_LoginOut(w http.ResponseWriter, r *http.Request) {
+	sess := model.Gsession.SessionStart(w, r)
+	sess.Delete("User")
+	http.Redirect(w, r, "/adminUser/login", http.StatusFound)
 }

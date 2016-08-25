@@ -1,0 +1,22 @@
+{{define "LeftMenu"}}
+<li><a href="/adminStats/index" >充值统计</a></li>
+<li><a href="/adminStats/mission" >任务统计</a></li>
+<li><a href="/adminStats/roleInfo">角色信息</a></li>
+<li><a href="/adminStats/LTVStats" class="active">LTV统计</a></li>
+{{end}}
+
+{{define "Main"}}
+<style type="text/css">
+.text-info span
+{
+	margin-left:20px;
+}
+.text-info{ margin-bottom:10px;}
+</style>
+<h4>LTV统计</h4><hr />
+<div class="text-info">
+<span>统计开始时间:???</span><span>首日用户数:???</span><span>当前总用户数:????</span><span>当前总付费数:????</span></div>
+<table class="table table-striped table-bordered table-hover">
+<tr><td>天数</td><td>留存人数</td><td>留存率</td><td>LTV</td><td>ARPU</td><td>当天新增用户</td><td>累计付费人数</td><td>日人均付费</td><td>付费率</td><td>累计收入</td><td>累计用户</td></tr>
+</table>
+{{end}}

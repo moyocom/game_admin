@@ -1,0 +1,32 @@
+{{define "LeftMenu"}}
+<li><a href="/adminUser/index">会员列表</a></li>
+<li><a href="/adminUser/userinfo" class="active">我的资料</a></li>
+{{end}}
+
+
+{{define "Main"}}
+<h4>个人资料</h4>
+<form action="/adminUser/userinfo" method="POST">
+<table class="table  table-hover" >
+ <tr><td>账号</td> <td>{{.User.UserName}}</td><tr>
+ <tr><td>昵称</td> <td><input type="text" name="NickName" value="{{.User.NickName}}"/></td></tr>
+ <tr> <td>权限等级</td> <td><select  value="{{.User.UserType}}">
+                           <option value ="0">超级管理员</option>
+                           <option value = "1">管理员</option></td></tr>
+ <tr><td>邮箱</td><td><input type="text" name="Email" value="{{.User.Email}}"/></td></tr>
+ <tr><td>联系方式</td><td><input type="text" name="Contact" value="{{.User.Contact}}"/></td></tr>
+ <tr><td>注册时间</td> <td>{{.User.RegTime}}</td></tr>
+ <tr><td>最后登录时间</td><td>{{.User.LoginTimeStr}}</td></tr>
+</table>
+<hr />
+<h6>修改密码</h6>
+<table class="table  table-hover">
+<tr><td>原密码</td><td><input name="OldPwd" type="password" /></td></tr>
+<tr><td>新密码</td><td><input name="NewPwd" type="password" /></td></tr>
+<tr><td>确认新密玛</td><td><input name="CheckNewPwd" type="password" /></td></tr>
+<tr><td colspan="2"><input class="btn btn-primary"  type="submit"  value="提交修改" /></td></tr>
+</table>
+<input type="hidden" name="ID" value="{{.User.ID}}" />
+</form>
+<hr />
+{{end}}

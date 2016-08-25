@@ -74,3 +74,7 @@ func AdminTemplate(w http.ResponseWriter, r *http.Request, data map[string]inter
 	data["user"] = model.AdminUser_CurUser(w, r)
 	t.Execute(w, data)
 }
+
+func (this *View) UtcToString(curt interface{}) string {
+	return "啊♂"
+}

@@ -33,7 +33,7 @@ box-shadow: inset 0 0 2px rgba(0,0,0,.12);}
 .table img{ max-height:20px; max-width:20px;}
 
 #othermsg{ float:right; margin-top:20px; margin-right:70px; color:#ccc}
-
+#othermsg a { color:#ccc;}
 
 .ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
 .ui-timepicker-div dl { text-align: left; }

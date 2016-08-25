@@ -5,9 +5,9 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	. "git.oschina.net/yangdao/extlib"
 	"io/ioutil"
 	. "lib/Util"
-	. "lib/lisp_core"
 	"model"
 	"net/http"
 )
@@ -16,6 +16,8 @@ func init() {
 	app.Gapps = append(app.Gapps, app.Apps{Pkgname: "adminServer", Appname: "服务器管理"})
 	app.R.HandleFunc("/adminServer/index", app.AppHandler(admin_ServerList, 1))
 	app.R.HandleFunc("/adminServer/ChangeServer", app.AppHandler(admin_ChangeServer, 1))
+	app.R.HandleFunc("/adminServer/DeleteServer", app.AppHandler(admin_deleteServer, 1))
+	app.R.HandleFunc("/adminServer/AddNewServer", app.AppHandler(admin_AddNewServer, 1))
 	fmt.Println("load adminServer")
 }
 
@@ -53,4 +55,23 @@ func admin_ChangeServer(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(serverData)
 	fmt.Println(model.APIServer)
 	ExitMsg(w, "切换成功", "/adminServer/index")
+}
+
+func admin_deleteServer(w http.ResponseWriter, r *http.Request) {
+
+	model.CenterDB.CenterDB.Exec("delete from go_server_list where id = " + r.FormValue("id"))
+	ExitMsg(w, "删除成功", "/adminServer/index")
+}
+
+func admin_AddNewServer(w http.ResponseWriter, r *http.Request) {
+	model.ServerData_AddServer(&model.ServerData{
+		Id:     Int(r.FormValue("ServerId")),
+		Name:   r.FormValue("ServerName"),
+		Desc:   r.FormValue("ServerDesc"),
+		IP:     r.FormValue("ServerIP"),
+		Port:   r.FormValue("ServerPort"),
+		DBUser: r.FormValue("DBUser"),
+		DBPwd:  r.FormValue("DBPwd"),
+	})
+	fmt.Fprint(w, "ok")
 }

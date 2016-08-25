@@ -1,0 +1,183 @@
+{{define "LeftMenu"}}
+<li><a href="/adminStats/index" >充值统计</a></li>
+<li><a href="/adminStats/mission" class="active">任务统计</a></li>
+<li><a href="/adminStats/roleInfo">角色信息</a></li>
+<li><a href="/adminStats/LTVStats">LTV统计</a></li>
+{{end}}
+{{define "Main"}}
+<h4>任务统计</h4>
+<style>
+.filterInput
+{ margin-top:10px;
+  width:110px;
+}
+</style>
+<link rel="stylesheet" type="text/css" href="/static/DTmedia/css/jquery.dataTables.css" />
+<script type="text/javascript" src="/static/DTmedia/js/jquery.dataTables.js"></script>
+<div id="Tabs">
+<ul>
+ <li><a href="#tabs-1">领取任务</a></li>
+ 
+ <li><a href="#tabs-2">达到完成条件</a></li>
+ 
+ <li><a href="#tabs-3">完成任务</a></li>
+ 
+ <li><a href="#tabs-4">取消任务</a></li>
+ 
+ <li><a href="#tabs-5">任务失败</a></li>
+</ul>
+<div id="tabs-1">
+ <table id="GetTaskTable" width="100%" class="table table-striped table-bordered table-hover" >
+  <thead><th>时间(:time)<br />
+  <select id="GetTaskTimeType" class="filterInput" style="margin-bottom:0px">
+   <option value="<">小于</option><option value=">">大于</option>
+  </select><input type="text" class="filterInput" id="GetTaskTime"  style="margin-bottom:0px"/></th>
+  <th>玩家Id(:playerId)<br /><input type="text" class="filterInput"  id="GetTaskPlayerId" style="margin-bottom:0px"/></th>
+  <th>任务Id(:taskId)<br /><input style="margin-bottom:0px" class="filterInput" id="GetTaskId" type="text" /></th></thead>
+ </table>
+</div>
+<div id="tabs-2">
+ <table id="TiaoJianTaskTable" width="100%" class="table table-striped table-bordered table-hover" >
+  <thead><th>时间(:time)<br /><select id="TiaoJianTimeType" class="filterInput" style="margin-bottom:0px">
+   <option value="<">小于</option><option value=">">大于</option>
+  </select><input type="text" id="TiaoJianTime" class="filterInput"  style="margin-bottom:0px"/></th>
+  <th>玩家Id(:playerId)<br /><input id="TiaoJianPlayerId" type="text" class="filterInput"  style="margin-bottom:0px"/></th>
+  <th>任务Id(:taskId)<br /><input id="TiaoJianTaskId" type="text" class="filterInput"  style="margin-bottom:0px"/></th></thead>
+ </table>
+</div>
+<div id="tabs-3">
+ <table id="WanChengTaskTable" width="100%" class="table table-striped table-bordered table-hover" >
+  <thead><th>时间(:time)<br /><select id="WanChengTaskTimeType" class="filterInput" style="margin-bottom:0px">
+   <option value="<">小于</option><option value=">">大于</option>
+  </select><input type="text" id="WanChengTaskTime"  class="filterInput" style="margin-bottom:0px"/></th>
+       <th>玩家Id(:playerId)<br /><input type="text" id="WanChengTaskPlayerId"  class="filterInput" style="margin-bottom:0px"/></th>
+       <th>任务Id(:taskId)<br /><input type="text" id="WanChengTaskId" class="filterInput" style="margin-bottom:0px"/></th></thead>
+ </table>
+</div>
+<div id="tabs-4">
+ <table id="QuXiaoTaskTable" width="100%" class="table table-striped table-bordered table-hover" >
+   <thead><th>时间(:time)<br /><select id="QuXiaoTaskTimeType" class="filterInput" style="margin-bottom:0px">
+   <option value="<">小于</option><option value=">">大于</option>
+  </select><input type="text" id="QuXiaoTaskTime" class="filterInput" style="margin-bottom:0px"/></th>
+          <th>玩家Id(:playerId)<br /><input id="QuXiaoTaskPlayerId" type="text" class="filterInput" style="margin-bottom:0px"/></th>
+          <th>任务Id(:taskId)<br /><input id="QuXiaoTaskId" type="text" class="filterInput" style="margin-bottom:0px"/></th></thead>
+ </table>
+</div>
+<div id="tabs-5">
+  <table id="ShiBaiTaskTable" width="100%" class="table table-striped table-bordered table-hover" >
+   <thead><th>时间(:time)<br /><select name="ShiBaiTimeType" class="filterInput" style="margin-bottom:0px">
+   <option value="<">小于</option><option value=">">大于</option>
+  </select><input id="ShiBaiTime" type="text"  class="filterInput" style="margin-bottom:0px"/></th>
+          <th>玩家Id(:playerId)<br /><input id="ShiBaiPlayerId" type="text"  class="filterInput" style="margin-bottom:0px"/></th>
+          <th>任务Id(:taskId)<br /><input id="ShiBaiTaskId" type="text"  class="filterInput" style="margin-bottom:0px"/></th></thead>
+  </table>
+</div>
+</div>
+
+<script type="text/javascript">
+ var GetTaskTable,TiaoJianTaskTable,WanChengTaskTable,QuXiaoTaskTable,ShiBaiTaskTable;
+ window.onload = function()
+ {
+    $("#Tabs").tabs();	
+	GetTaskTable = InitDataTable("#GetTaskTable","/adminStats/missionQuery?type=GetTask");
+	TiaoJianTaskTable = InitDataTable("#TiaoJianTaskTable","/adminStats/missionQuery?type=TiaoJian");
+	WanChengTaskTable = InitDataTable("#WanChengTaskTable","/adminStats/missionQuery?type=WanCheng");
+	QuXiaoTaskTable = InitDataTable("#QuXiaoTaskTable","/adminStats/missionQuery?type=QuXiao");
+	ShiBaiTaskTable = InitDataTable("#ShiBaiTaskTable","/adminStats/missionQuery?type=ShiBai");
+ }
+ $(".filterInput").blur(function(eventData)
+ {
+	curTableId = eventData.currentTarget.parentNode.parentNode.parentNode.parentNode.getAttribute("id");
+	genTimeCommond = function(timeType,timeVal)
+	{
+		if($.trim(timeVal)!=""){return " and "+timeType+ " :time "+timeVal;}
+		return "";
+	}
+	
+	genPlayerCommond = function(playerVal)
+	{
+		if($.trim(playerVal)!="")
+		{
+			return " and  var2 = \""+playerVal+"\"";
+		}
+		return "";
+	}
+	
+	genTaskId = function(taskVal)
+	{
+		if($.trim(taskVal)!="")
+		{
+			return " and var3 = \""+taskVal+"\"";
+		}
+		return "";
+	}
+	SearchCommondFn = function(tableObj,strCommond) 
+	{
+		 if(strCommond!="") 
+		   tableObj.fnFilter(strCommond);
+	      else
+		   tableObj.fnFilter("");
+   }
+	switch(curTableId)
+	{
+	  case "GetTaskTable":
+	    strTime = $.trim($("#GetTaskTime").val());
+		strPlayerId = $.trim($("#GetTaskPlayerId").val());
+	    strGetTaskId = $.trim($("#GetTaskId").val());
+		var searchCommond = "";
+		searchCommond += genTimeCommond($("#GetTaskTimeType").val(),strTime);
+		searchCommond += genPlayerCommond(strPlayerId);
+		searchCommond += genTaskId(strGetTaskId);
+		SearchCommondFn(GetTaskTable,searchCommond);
+	  break;
+	  case "TiaoJianTaskTable":
+	    var searchCommond  = "";
+		strTime = $.trim($("#TiaoJianTime").val());
+		strPlayerId = $.trim($("#TiaoJianPlayerId").val());
+		strTaskId = $.trim($("#TiaoJianTaskId").val());
+	    var searchCommond = "";
+		searchCommond += genTimeCommond($("#TiaoJianTimeType").val(),strTime);
+		searchCommond += genPlayerCommond(strPlayerId);
+		searchCommond += genTaskId(strTaskId);
+		SearchCommondFn(TiaoJianTaskTable,searchCommond);
+	  break;
+	  case "WanChengTaskTable":
+	    var searchCommond = "";
+		strTime = $.trim($("#WanChengTaskTime").val());  
+		strPlayerId = $.trim($("#WanChengTaskPlayerId").val());
+		strTaskId = $.trim($("#WanChengTaskId").val());
+		searchCommond += genTimeCommond($("#WanChengTaskTimeType").val(),strTime);
+		searchCommond += genPlayerCommond(strPlayerId);
+		searchCommond += genTaskId(strTaskId);
+		SearchCommondFn(WanChengTaskTable,searchCommond);
+	  break;
+	  case "QuXiaoTaskTable":
+	    var searchCommond = "";
+		strTime = $.trim($("#QuXiaoTaskTime").val());  
+		strPlayerId = $.trim($("#QuXiaoTaskPlayerId").val());
+		strTaskId = $.trim($("#QuXiaoTaskId").val());
+		searchCommond += genTimeCommond($("#QuXiaoTaskTimeType").val(),strTime);
+		searchCommond += genPlayerCommond(strPlayerId);
+		searchCommond += genTaskId(strTaskId);
+		SearchCommondFn(QuXiaoTaskTable,searchCommond);
+	  break;
+	  case "ShiBaiTaskTable":
+	    var searchCommond = "";
+		strTime = $.trim($("#ShiBaiTime").val());  
+		strPlayerId = $.trim($("#ShiBaiPlayerId").val());
+		strTaskId = $.trim($("#ShiBaiTaskId").val());
+		searchCommond += genTimeCommond($("#ShiBaiTimeType").val(),strTime);
+		searchCommond += genPlayerCommond(strPlayerId);
+		searchCommond += genTaskId(strTaskId);
+		SearchCommondFn(ShiBaiTaskTable,searchCommond);
+	  break;
+    }
+ });
+ 
+ 
+ function InitDataTable(Id,ajaxaddr)
+ {
+	return $(Id).dataTable({bFilter:true, ajax:ajaxaddr,bPaginate:true,"bInfo": true,"serverSide": true,"lengthMenu": [[15, 10], [15,10]]});
+ }
+</script>
+{{end}}

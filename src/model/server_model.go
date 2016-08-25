@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	. "lib/lisp_core"
+	"time"
 )
 
 //{"memory_total":143883448,"memory_processes":96757568,"memory_processes_used":96751880,"memory_system":47125880,
@@ -31,15 +32,16 @@ type ServerState struct {
 }
 
 type ServerData struct {
-	Id      int
-	Name    string
-	Desc    string
-	IP      string
-	Port    string
-	DBUser  string
-	DBPwd   string
-	State   int
-	AddTime int64
+	Id        int
+	Name      string
+	Desc      string
+	IP        string
+	Port      string
+	DBUser    string
+	DBPwd     string
+	State     int
+	AddTime   int64
+	StartTime int64
 }
 
 func ServerData_Table() []*ServerData {
@@ -58,7 +60,7 @@ func ServerData_ById(id int) *ServerData {
 	query := SQLDB.QueryRow(sqlStr)
 	retServerData := &ServerData{}
 	err := query.Scan(&retServerData.Id, &retServerData.Name, &retServerData.Desc, &retServerData.IP, &retServerData.Port, &retServerData.DBUser,
-		&retServerData.DBPwd, &retServerData.State, &retServerData.AddTime)
+		&retServerData.DBPwd, &retServerData.State, &retServerData.AddTime, &retServerData.StartTime)
 	if err != nil {
 		fmt.Println(err, "query err")
 	}
@@ -68,6 +70,18 @@ func ServerData_ById(id int) *ServerData {
 func goQueryServerData2Struct(row *sql.Rows) *ServerData {
 	retServerData := &ServerData{}
 	row.Scan(&retServerData.Id, &retServerData.Name, &retServerData.Desc, &retServerData.IP, &retServerData.Port, &retServerData.DBUser,
-		&retServerData.DBPwd, &retServerData.State, &retServerData.AddTime)
+		&retServerData.DBPwd, &retServerData.State, &retServerData.AddTime, &retServerData.StartTime)
 	return retServerData
+}
+
+func ServerData_AddServer(data *ServerData) {
+	stmt, err := CenterDB.CenterDB.Prepare("insert into go_server_list(id,Name,IP,Port,DBUser,DBPwd,AddTime)values(?,?,?,?,?,?,?)")
+	if err != nil {
+		fmt.Println(err)
+	}
+	_, err = stmt.Exec(data.Id, data.Name, data.IP, data.Port, data.DBUser, data.DBPwd, time.Now().Unix())
+	if err != nil {
+		fmt.Println(err)
+	}
+
 }

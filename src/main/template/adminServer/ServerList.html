@@ -1,0 +1,73 @@
+{{define "LeftMenu"}}
+<li><a href="/adminServer/index" class="active">服务器列表</a></li>
+{{end}}
+
+{{define "Main"}}
+ <h4>服务器列表</h4>
+ <script type="text/javascript" src="/static/js/adminbase.js"></script>
+ <input type="button"  class="btn btn-primary" data-toggle="modal" data-target="#popNewServer" style="margin:10px" value="添加服务器"/>
+ <table class="table table-striped table-bordered table-hover">
+  <tr><th>服务器Id</th><th>名称</th><th>描述</th><th>IP</th><th>操作</th></tr>
+  {{range .server_list}}
+  <tr><td>{{.Id}}</td><td>{{.Name}}</td><td>{{.Desc}}</td><td>{{.IP}}</td>
+  <td><a href="/adminServer/ChangeServer?id={{.Id}}">切换</a>&nbsp;&nbsp;<a href="#">停服</a>&nbsp;&nbsp;<a href="/adminServer/DeleteServer?id={{.Id}}">删除</a></td>
+  </tr>
+  {{end}}
+</table>
+
+<div id="popNewServer" class="modal hide fade"  >
+  <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3 style="text-align:center">添加服务器</h3>
+      </div>
+      <div class="modal-body" style="max-height:500px;">
+        <form id="AddNewServerForm" action="/adminUser/addNewUser" method="POST">
+         <table class="table">
+          <tr><td>Id</td><td><input type="text" name="ServerId"  placeholder="不可为空"/></td></tr>
+          <tr><td>服务器名</td><td><input type="text"   name="ServerName" placeholder="不可为空"/></td></tr>
+          <tr><td>附加描述</td><td><input type="text"   name="ServerDesc" /></td></tr>
+          <tr><td>IP</td><td><input type="text" placeholder="不可为空" name="ServerIP" /></td></tr>
+          <tr><td>端口</td><td><input type="text" name="ServerPort" placeholder="不可为空"  /> </td></tr>
+          <tr><td>DB账号</td><td><input type="text" name="DBUser" /></td></tr> 
+          <tr><td>DB密码</td><td><input type="text" name="DBPwd" /></td></tr>
+         </table>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal" aria-hidden="true">取消</a>
+        <a href="javascript:SubAddNewServer()" class="btn btn-primary">确定添加</a>
+      </div>
+     </form>
+</div>
+
+<script type="text/javascript">
+function SubAddNewServer()
+{
+   val = WhileVal(IsNameNull,true,["ServerId","ServerName","ServerIP","ServerPort"]);
+	if(val != null)
+	{
+	   	alert(val+"不可为空");
+		return
+	}
+	NameUrlData = function(Name){return Name+"="+$("#[name = "+Name+"]").val();}
+    
+	postStr = NameUrlData("ServerId")+"&" + NameUrlData("ServerName")+"&" + NameUrlData("ServerIP")+"&" + 
+			  NameUrlData("ServerPort")+"&" + NameUrlData("DBUser") +"&" + NameUrlData("DBPwd") + NameUrlData("ServerDesc");
+			  
+    $.ajax({
+	   url : "/adminServer/AddNewServer",async:false, type:"POST", data : postStr,
+	   success: function(data){
+		if(data=="ok")
+		{
+		  $('#popNewServer').modal('hide');
+		  window.location.reload();
+		}
+		else
+		{
+			alert(data);
+		}
+	   },
+	   error: function(data){alert("添加失败");}
+	});
+}
+</script>
+{{end}}
